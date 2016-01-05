@@ -1,0 +1,14 @@
+#data{
+	width:720px;
+	height:auto;
+	float:left;
+    display: inline-block;
+}
+#total{
+	width:320px;
+	height:auto;
+	float:left;
+    clear: right;
+    display: inline-block;
+}
+

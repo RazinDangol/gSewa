@@ -1,0 +1,51 @@
+{%extends 'layout.html'%}
+{%block main_table%}
+<div class='container table-responsive' id='data'>
+<table class='table table-bordered' id='table1'>
+<thead>
+    <tr>
+        <td>Service Provider</td>
+        <td>Description </td>
+        <td>Service Name</td>
+        <td>Type</td>
+        <td>Amount</td>
+        <td>Status</td>
+    </tr>
+</thead>
+<tbody>
+{%for payment in payments%}
+    <tr>
+        <td>{{ payment.service_provider }}</td>
+        <td>{{ payment.service }}</td>
+        <td>{{ payment.service_name }}</td>
+        <td>{{ payment.service_type }}</td>
+        <td>{{ payment.amount }}</td>
+        <td>{{ payment.status }}</td> 
+    </tr>
+{%endfor%}
+</tbody>
+</table>
+</div>
+{%endblock%}}
+{% block total%}
+<div class='container' id='total'>
+    <table class='table table-bordered' data-sort-name='service_provider' data-sort-order='desc'>
+        <thead>
+            <tr>
+            <td data-field='service_provider'><h4>Service Provider</h4></td>
+            <td data-field='no'><h4>No of Transaction</h4></td>
+            <td data-field='amount'><h4>Total Amount</h4></td>
+            </tr>
+        </thead>
+        <tbody>
+        {%for item in total%}
+            <tr>
+                <td>{{item.service_provider}}</td>
+                <td>{{item[1]}}</td>
+                <td>{{item[2]}}</td>
+            </tr>
+        {%endfor%}
+        </tbody>
+    </table>
+</div>
+{%endblock%}
