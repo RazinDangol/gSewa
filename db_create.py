@@ -1,5 +1,5 @@
 from gsewa import db
-from models import Payment, Cashback
+from models import Payment, Cashback, Info
 
 from parse import * 
 import xlrd as x
@@ -12,20 +12,28 @@ bal_col = 13  # Balance Column
 stat_col = 14  # Status Column
 
 
-db.drop_all()
-# Create the tables 
-db.create_all()
-
-# insert data
-
-def populate(doc_name):
+def doc_open(doc_name):
     workbook = x.open_workbook(doc_name)
     sheet = workbook.sheet_by_index(0)
+    return sheet
+# insert data
+
+def info(doc_name):
+    id_row = 4
+    id_col = 11
+    sheet = doc_open(doc_name)
+    esewa_id = parse(sheet, id_row, id_col)
+    db.session.add(Info(esewa_id))
+    db.session.commit()
+
+
+def populate(doc_name):
     row = 7
     des_col = 5
     deb_col = 11  # Debit column
     cre_col = 12  # Credit column
     bal_col = 13  # Balance Column
+    sheet = doc_open(doc_name)
     while parse(sheet,row,des_col):
         desc=parse(sheet,row,des_col)   
         try:
