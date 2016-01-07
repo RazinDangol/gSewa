@@ -18,9 +18,6 @@ q = Queue(connection = conn)
 from models import *
 
 
-def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
