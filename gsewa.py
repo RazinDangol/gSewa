@@ -17,6 +17,7 @@ db = SQLAlchemy(app)
 q = Queue(connection = conn)
 from models import *
 
+info = db.session.query(Info).all()
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -47,7 +48,9 @@ def payment(service_provider='all'):
             service_provider=service_provider.upper())
     total = db.session.query(Payment.service_provider, func.count(
         Payment.amount), func.sum(Payment.amount)).group_by(Payment.service_provider)
-    return render_template('payment.html', payments=payments, service_provider=service_provider, total=total)
+    
+    print(info)
+    return render_template('payment.html', payments=payments, service_provider=service_provider, total=total,info=info)
 
 
 @app.route('/cashback/<service_provider>')
@@ -59,7 +62,7 @@ def cashback(service_provider='all'):
             service_provider=service_provider.upper())
     total = db.session.query(Cashback.service_provider, func.count(
         Cashback.amount), func.sum(Cashback.amount)).group_by(Cashback.service_provider)
-    return render_template('cashback.html', cashbacks=cashbacks, service_provider=service_provider, total=total)
+    return render_template('cashback.html', cashbacks=cashbacks, service_provider=service_provider, total=total,info=info)
 
 
 if __name__ == '__main__':
