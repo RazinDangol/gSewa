@@ -1,10 +1,10 @@
 # gSewa(Greedy Sewa)
 Flask program to analyze transaction/data from [eSewa](http://www.esewa.com.np) excel datasheet. 
 ##Requirements
--First install Python 3 
--Install requirements via pip
+- First install Python 3 
+- Install requirements via pip
 ```
-pip install -r requirements.txt
+  pip install -r requirements.txt
 ``` 
 
 ##Usage
