@@ -19,10 +19,10 @@ def doc_open(doc_name):
 # insert data
 
 def info(doc_name):
-    id_row = 4
-    id_col = 11
+    id_row = 3
+    id_col = 10
     sheet = doc_open(doc_name)
-    esewa_id = parse(sheet, id_row, id_col)
+    esewa_id = str(parse(sheet, id_row, id_col))
     db.session.add(Info(esewa_id))
     db.session.commit()
 

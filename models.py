@@ -44,8 +44,11 @@ class Cashback(db.Model):
 
 class Info(db.Model):
     __tablename__ = 'info'
-    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
-    esewa_id = db.column(db.Integer)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    esewa_id = db.Column(db.String)
 
     def __init__(self,esewa_id):
         self.esewa_id = esewa_id
+
+    def __repr__(self):
+        return '{}'.format(self.esewa_id)
