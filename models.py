@@ -23,7 +23,7 @@ class Payment(db.Model):
 
 class Cashback(db.Model):
     __tablename__ = "cashback"
-    id = db.Column(db.Integer,primary_key=True)
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True)
     service_provider=db.Column(db.String)
     service = db.Column(db.Text)
     service_name = db.Column(db.String)
@@ -42,3 +42,10 @@ class Cashback(db.Model):
     def __repr__(self):
         return '{}'.format(self.service_provider)
 
+class Info(db.Model):
+    __tablename__ = 'info'
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
+    esewa_id = db.column(db.Integer)
+
+    def __init__(self,esewa_id):
+        self.esewa_id = esewa_id
