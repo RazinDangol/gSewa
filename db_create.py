@@ -58,8 +58,14 @@ def populate(doc_name):
                 command_execute('cashback','NTC',desc,'recharge_card','Recharge Card',credit,status,time)
             elif refine('Ncell', desc):
                 command_execute('cashback','NCELL',desc,'prepaid','Topup',credit,status,time)              
-            elif refine('simtv', desc):
+            elif refine('SIM TV Payment', desc):
                 command_execute('cashback','SIMTV',desc,'simtv','Topup',credit,status,time)
+            elif refine('Worldlink', desc):
+                command_execute('cashback','WORLDLINK',desc,'worldlink','Topup',credit,status,time)
+            elif refine('UTL', desc):
+                command_execute('cashback','UTL',desc,'utl','recharge_card',credit,status,time)
+            elif refine('Vianet', desc):
+                command_execute('cashback','VIANET',desc,'vianet','Topup',credit,status,time)    
             elif refine('eSewa', desc):  # Greedy Sewa cash back is assumed to be cashback of dish home recharge card
                 command_execute('cashback','DISHHOME',desc,'recharge_card','Topup',credit,status,time)
             elif refine('subisu', desc):
