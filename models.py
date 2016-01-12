@@ -9,15 +9,16 @@ class Payment(db.Model):
     service_type = db.Column(db.String)
     amount = db.Column(db.Integer)
     status = db.Column(db.String)
+    time = db.Column(db.String)
 
-    def __init__(self,service_provider,service,service_name,service_type,amount,status):
+    def __init__(self,service_provider,service,service_name,service_type,amount,status,time):
         self.service_provider = service_provider
         self.service = service
         self.service_name = service_name
         self.service_type = service_type
         self.amount = amount
         self.status = status
-
+        self.time = time
     def __repr__(self):
         return '{}'.format(str(self.service_provider))
 
@@ -30,15 +31,15 @@ class Cashback(db.Model):
     service_type = db.Column(db.String)
     amount = db.Column(db.Integer)
     status = db.Column(db.String)
-    
-    def __init__(self,service_provider,service,service_name,service_type,amount,status):
+    time = db.Column(db.String)
+    def __init__(self,service_provider,service,service_name,service_type,amount,status,time):
         self.service_provider = service_provider
         self.service = service
         self.service_name = service_name
         self.service_type = service_type
         self.amount = amount
         self.status = status
-
+        self.time = time
     def __repr__(self):
         return '{}'.format(self.service_provider)
 

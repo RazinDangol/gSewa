@@ -13,6 +13,7 @@
         <td>Type</td>
         <td>Amount</td>
         <td>Status</td>
+        <td>Time</td>
     </tr>
 </thead>
 <tbody>
@@ -23,7 +24,8 @@
         <td>{{ payment.service_name }}</td>
         <td>{{ payment.service_type }}</td>
         <td>{{ payment.amount }}</td>
-        <td>{{ payment.status }}</td> 
+        <td>{{ payment.status }}</td>
+        <td>{{ payment.time }}</td>
     </tr>
 {%endfor%}
 </tbody>
