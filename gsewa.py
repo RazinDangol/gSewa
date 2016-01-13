@@ -1,23 +1,34 @@
-from flask import Flask, render_template, request, redirect , url_for
+from flask import Flask, render_template, request, redirect , url_for, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from werkzeug import secure_filename
 import os
-from db_create import *
-from rq import Queue
-from rq.job import Job
-from worker import conn
- 
+# Making celery instance 
+from celery import Celery
+def make_celery(app):
+    celery = Celery(app.import_name, broker=app.config['CELERY_BROKER_URL'])
+    celery.conf.update(app.config)
+    TaskBase = celery.Task
+    class ContextTask(TaskBase):
+        abstract = True
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self, *args, **kwargs)
+    celery.Task = ContextTask
+    return celery
 
 # configurations
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
 db = SQLAlchemy(app)
-q = Queue(connection = conn)
-from models import *
 
-info = db.session.query(Info).all()
+
+
+from models import *
+from task import *
+
+info = db.session.query(Info).first()
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -30,18 +41,17 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
-            
-            
-            job = q.enqueue_call(func = populate, 
-            args=('esewa.xls',))
-            
-            return 'success'
+            populate.delay(os.path.join(os.getcwd(),'upload',filename))
+            return redirect(url_for('payment',service_provider='all'))
+        else:
+            flash('Please upload datasheet of excel format')
+            return render_template('index.html')
     return render_template('index.html')
 
 
 @app.route('/payment/<service_provider>')
-def payment(service_provider='all'):
-    if service_provider.lower() == 'all' or service_provider is None:
+def payment(service_provider):
+    if service_provider.lower() == 'all':
         payments = db.session.query(Payment).all()
     else:
         payments = db.session.query(Payment).filter_by(
@@ -49,7 +59,7 @@ def payment(service_provider='all'):
     total = db.session.query(Payment.service_provider, func.count(
         Payment.amount), func.sum(Payment.amount)).group_by(Payment.service_provider)
     
-    print(info)
+    
     return render_template('payment.html', payments=payments, service_provider=service_provider, total=total,info=info)
 
 
