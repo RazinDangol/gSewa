@@ -2,16 +2,65 @@
 <html>
 <head>
     <title>Greedy Sewa v 0.1</title>
+    <style>
+		.hidden{
+			visibility: hidden;
+		}
+    </style>
 </head>
 <body>
 	{%if message in get_flashed_messages()%}
 		<h2 style='color:red'>{{message}}</h2>
 	{%endif%}
+	<div id='upload'>
     <h1>Upload new File</h1>
-    <form action="#" method="post" enctype="multipart/form-data">
-      <p><input type="file" name="file">
-         <input type="submit" value="Upload">
+    <form method="POST" enctype="multipart/form-data">
+      	<input type="file" id='fileinput' name='file'>
     </form>
+    </div>
+    <div id='processing' class='hidden'>
+    <h2>Processing...Please wait</h2>
+	<img src='{{ url_for('static',filename='loader.gif') }}'>
+    </div>
+    <script type="text/javascript" src='{{url_for('static',filename='js/jquery-1.11.2.min.js')}}'></script> 
+    <script src='../static/js/dmuploader.min.js'></script>	   
+     <script type="text/javascript">
+     var status_url;
+     $('#upload').dmUploader({
+        url: '/process',
+        dataType: 'json',
+   
+        onComplete: function(){
+          console.log("Upload complete");
+        },
+        onUploadSuccess: function(id,data){
+        	status_url = data.location
+        	console.log(status_url)
+        	$('div#upload').addClass('hidden');
+        	$('div#processing').removeClass('hidden');
+  
+          var data = $.getJSON(status_url,function(result){
+              console.log(result.state)
+            });
+          var d = doPoll();
+    function doPoll(){
+    $.getJSON(status_url, function(data) {
+         // process results here
+        if(data.state =="SUCCESS"){
+          console.log('Success');
+          window.location.href = 'http://127.0.0.1:5000/payment/all';
 
+        }
+        else{
+          console.log('pending');
+        setTimeout(doPoll,1000);
+      }
+
+    });
+}
+      }
+    });
+     
+     </script>
 </body>
 </html>

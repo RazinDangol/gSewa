@@ -32,8 +32,8 @@ def command_execute(table,service_provider,service,service_name,service_type,amo
         db.session.add(Cashback(service_provider,service,service_name,service_type,float(amount),status,time))
     
 
-@celery.task
-def populate(doc_name):
+@celery.task(bind=True)
+def populate(self,doc_name):
     row = 7
     des_col = 5
     deb_col = 11  # Debit column
@@ -42,8 +42,10 @@ def populate(doc_name):
     db.drop_all()
     db.create_all()
     info(doc_name)
+    self.update_state(state='PROGRESS')
     sheet = doc_open(doc_name)
     while parse(sheet,row,des_col):
+        self.update_state(state='PROGRESS')
         desc=parse(sheet,row,des_col)
         time = parse(sheet,row,1)   
         try:
@@ -118,7 +120,7 @@ def populate(doc_name):
             pass
         row+=1
     db.session.commit()
-
+    return {'result':'Task Completed'}
 
 # Commit the changes
 
