@@ -10,7 +10,8 @@ Flask program to analyze transaction/data from [eSewa](http://www.esewa.com.np) 
 ##Note:
 Only few features works currently but don't worry all features will work soon :)
 Features not working:
--~~ Uploading of excel datasheet~~
+
+- ~~Uploading of excel datasheet~~
 - Total Tab
 
 ##Usage
