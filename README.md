@@ -16,7 +16,7 @@ Features not working:
 
 ##Usage
 - Download excel datasheet from [eSewa](http://www.esewa.com.np)
-- First start redis server 
+- First start [redis server](http://redis.io/download) 
 ```
 redis-server
 ```
