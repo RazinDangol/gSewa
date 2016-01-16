@@ -22,13 +22,15 @@
       <h1>
 <a id="gsewagreedy-sewa" class="anchor" href="#gsewagreedy-sewa" aria-hidden="true"><span class="octicon octicon-link"></span></a>gSewa(Greedy Sewa)</h1>
 
-<p>gSewa is a <a href="http://flask.pocoo.org/">Flask</a> program to analyze transaction/data from <a href="http://www.esewa.com.np">eSewa</a> excel datasheet. </p>
+<p>Flask program to analyze transaction/data from <a href="http://www.esewa.com.np">eSewa</a> excel datasheet. </p>
 
 <h2>
 <a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
 
 <ul>
-<li>First install <a href="https://www.python.org/downloads/">Python 3.3 or newer version</a> </li>
+<li>First install <a href="https://www.python.org/downloads/">Python 3.3 or newer version</a>
+</li>
+<li>Install redis-server</li>
 <li>Install requirements via pip</li>
 </ul>
 
@@ -42,27 +44,37 @@
 Features not working:</p>
 
 <ul>
-<li>Uploading of excel datasheet</li>
+<li><del>Uploading of excel datasheet</del></li>
 <li>Total Tab</li>
 </ul>
 
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>Download excel datasheet from <a href="http://www.esewa.com.np">eSewa</a> and put it in project directory
-Then initiate the database</p>
+<ul>
+<li>Download excel datasheet from <a href="http://www.esewa.com.np">eSewa</a>
+</li>
+<li>First start <a href="http://redis.io/download">redis server</a> </li>
+</ul>
 
-<div class="highlight highlight-source-python"><pre>python manage.py init_db <span class="pl-k">&lt;</span>excel document<span class="pl-k">&gt;</span></pre></div>
+<pre><code>redis-server
+</code></pre>
 
-<p>For ex:</p>
+<ul>
+<li>Start celery worker</li>
+</ul>
 
-<div class="highlight highlight-source-python"><pre>python manage.py init_db esewa.xls <span class="pl-c">#if your excel file is named esewa.xls </span></pre></div>
+<pre><code>celery -A gsewa.celery worker -l info
+</code></pre>
 
-<p>Then runserver:</p>
+<ul>
+<li>Then runserver</li>
+</ul>
 
-<div class="highlight highlight-source-python"><pre>python manage.py runserver</pre></div>
+<pre><code>python manage.py runserver
+</code></pre>
 
-<p>Navigate to <a href="http://127.0.0.1:5000/payment/all">127.0.0.1:5000/payment/all</a></p>
+<p>Navigate to <a href="http://127.0.0.1:5000/">127.0.0.1:5000/</a></p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/RazinDangol/gSewa">gSewa</a> is maintained by <a href="https://github.com/RazinDangol">RazinDangol</a>.</span>
@@ -72,6 +84,16 @@ Then initiate the database</p>
 
     </section>
 
-  
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-72502994-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
