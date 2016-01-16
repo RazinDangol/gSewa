@@ -4,7 +4,7 @@
 	float:left;
     display: inline-block;
 }
-#total{
+#complete,#cancel{
 	width:320px;
 	height:auto;
 	float:left;

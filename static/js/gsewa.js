@@ -1,15 +1,29 @@
-var totals=[0,0];
+var complete=[0,0];
+var cancel=[0,0];
 $(document).ready(function(){
     
-        var $dataRows=$("#total tr:not('.totalData')");
+        var $dataRows=$("#complete tr:not('.totalData')");
             $dataRows.each(function() {
                 $(this).find('.rowData').each(function(i){        
-                    totals[i]+=parseInt( $(this).html());
+                    complete[i]+=parseInt( $(this).html());
                 });
             });
-            console.log(totals);
-	$('#total td.totalData').each(function(i){
+            
+	$('#complete td.totalData').each(function(i){
     console.log(this);
-    $(this).html(totals[i]);
+    $(this).html(complete[i]);
+});
+    var $dataRows=$("#cancel tr:not('.totalData')");
+            $dataRows.each(function() {
+                $(this).find('.rowData').each(function(i){        
+                    cancel[i]+=parseInt( $(this).html());
+                });
+            });
+            
+    $('#cancel td.totalData').each(function(i){
+    console.log(this);
+    $(this).html(cancel[i]);
+
+
 });
 	});

@@ -52,10 +52,12 @@ def payment(service_provider):
     else:
         payments = db.session.query(Payment).filter_by(
             service_provider=service_provider.upper())
-    total = db.session.query(Payment.service_provider, func.count(
-        Payment.amount), func.sum(Payment.amount)).group_by(Payment.service_provider)
+    complete = db.session.query(Payment.service_provider, func.count(
+        Payment.amount), func.sum(Payment.amount)).filter(Payment.status == "COMPLETE").group_by(Payment.service_provider)
+    cancel = db.session.query(Payment.service_provider, func.count(
+        Payment.amount), func.sum(Payment.amount)).filter(Payment.status == "CANCELED").group_by(Payment.service_provider)
 
-    return render_template('payment.html', payments=payments, service_provider=service_provider, total=total, info=info)
+    return render_template('payment.html', payments=payments, service_provider=service_provider, complete=complete,cancel=cancel, info=info)
 
 
 @app.route('/cashback/<service_provider>')
