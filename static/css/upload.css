@@ -1,0 +1,103 @@
+@charset "utf-8";
+/* CSS Document */
+div{
+	display: block;	
+}
+
+.page-header{
+	text-align:center;
+}
+
+
+
+.menu{
+position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -19rem;
+  margin-top: -26.5rem;
+  width: 38rem;
+  height: 53rem;
+  overflow: hidden;
+	
+}
+
+.upload{
+	border: 2px dotted #A5A5C7;
+	width: 100%;
+	color: #92AAB0;
+	text-align: center;
+	vertical-align: middle;
+	padding: 30px 0px;
+	margin-bottom: 10px;
+	font-size: 200%;
+	cursor: default;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+div.or{
+
+	font-size: 70%;
+	font-weight: bold;
+	color: #8A8A8A;
+	padding: 10px;
+}
+
+div.browser label {
+	background-color: #5a7bc2;
+	padding: 5px 15px;
+	color: white;
+	padding: 6px 0px;
+	font-size: 60%;
+	font-weight: bold;
+	cursor: pointer;
+	border-radius: 2px;
+	position: relative;
+	overflow: hidden;
+	display: block;
+	width: 300px;
+	margin: 20px auto 0px auto;
+
+	box-shadow: 2px 2px 2px #888888;
+}
+div.browser span {
+	cursor: pointer;
+}
+
+div.browser input {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	border: solid transparent;
+	border-width: 0 0 100px 200px;
+	opacity: .0;
+	filter: alpha(opacity= 0);
+	-o-transform: translate(250px,-50px) scale(1);
+	-moz-transform: translate(-300px,0) scale(4);
+	direction: ltr;
+	cursor: pointer;
+}
+div.browser label:hover {
+	background-color: #427fed;
+}
+
+div#processing{
+	color: #336FE7;
+}
+
+.page-header h1{
+color:rgb(50, 156, 108);
+font-size:65px;
+font-weight:bold;	
+}
+
+.page-header small{
+	font-size:25px;
+	color:#0DAB50;	
+}
