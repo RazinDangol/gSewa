@@ -2,7 +2,7 @@
 Flask program to analyze transaction/data from [eSewa](http://www.esewa.com.np) excel datasheet. 
 ##Requirements
 - First install [Python 3.3 or newer version](https://www.python.org/downloads/)
-- Install redis-server
+- Install [redis server](http://redis.io/download)
 - Install requirements via pip
 ```
   pip install -r requirements.txt
