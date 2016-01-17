@@ -33,11 +33,18 @@
 </div>
 {%endblock%}
 {%block total%}
-<div class='container' id='complete'>
+<div class='container' id='total'>
+    <div class='panel panel-default table-responsive panel-primary' id='complete'>
+        <div class ='panel-heading'>
+            <h3 class='panel-title'>
+                Completed
+            </h3>
+        </div><!--.panel-heading-->
+    
     <table class='table table-bordered'>
         <thead>
             <tr>
-            <td><h4>Service Provider</h4></td>
+            <td data-field='service_provider'><h4>Service Provider</h4></td>
             <td><h4>No of Transaction</h4></td>
             <td><h4>Total Amount</h4></td>
             </tr>
@@ -50,12 +57,13 @@
                 <td class = 'rowData'>{{item[2]}}</td>
             </tr>
         {%endfor%}
-        <tr class='totalColumn'>
+            <tr class='totalColumn'>
                 <td><strong>Total</strong></td>
                 <td class = 'totalData'></td>
                 <td class = 'totalData'></td>
             </tr>
         </tbody>
     </table>
+</div><!--#complete-->
 </div>
 {%endblock%}

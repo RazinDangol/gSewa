@@ -5,7 +5,7 @@ $(document).ready(function(){
         var $dataRows=$("#complete tr:not('.totalData')");
             $dataRows.each(function() {
                 $(this).find('.rowData').each(function(i){        
-                    complete[i]+=parseInt( $(this).html());
+                    complete[i]+=parseFloat( $(this).html());
                 });
             });
             

@@ -33,55 +33,73 @@
 </div>
 {%endblock%}}
 {% block total%}
-<div class='container' id='complete'>
-    <table class='table table-bordered' data-sort-name='service_provider' data-sort-order='desc'>
-        <thead>
-            <tr>
-            <td data-field='service_provider'><h4>Service Provider</h4></td>
-            <td data-field='no'><h4>No of Transaction</h4></td>
-            <td data-field='amount'><h4>Total Amount</h4></td>
-            </tr>
-        </thead>
-        <tbody>
-        {%for item in complete%}
-            <tr>
-                <td>{{item.service_provider}}</td>
-                <td class = 'rowData'>{{item[1]}}</td>
-                <td class = 'rowData'>{{item[2]}}</td>
-            </tr>
-        {%endfor%}
-            <tr class='totalColumn'>
-                <td><strong>Total</strong></td>
-                <td class = 'totalData'></td>
-                <td class = 'totalData'></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<div class='container' id='total'>
+    <div class='panel panel-default table-responsive panel-primary' id='complete'>
+        <div class ='panel-heading'>
+            <h3 class='panel-title'>
+                Completed
+            </h3>
+        </div><!--.panel-heading-->
 
-<div class='container' id='cancel'>
-    <table class='table table-bordered' data-sort-name='service_provider' data-sort-order='desc'>
-        <thead>
-            <tr>
-            <td data-field='service_provider'><h4>Service Provider</h4></td>
-            <td data-field='no'><h4>No of Transaction</h4></td>
-            <td data-field='amount'><h4>Total Amount</h4></td>
-            </tr>
-        </thead>
-        <tbody>
-        {%for item in cancel%}
-            <tr>
-                <td>{{item.service_provider}}</td>
-                <td class = 'rowData'>{{item[1]}}</td>
-                <td class = 'rowData'>{{item[2]}}</td>
-            </tr>
-        {%endfor%}
-            <tr class='totalColumn'>
-                <td><strong>Total</strong></td>
-                <td class = 'totalData'></td>
-                <td class = 'totalData'></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+        <table class='table table-bordered' data-sort-name='service_provider' data-sort-order='desc'>
+            <thead>
+                <tr>
+                <td data-field='service_provider'><h4>Service Provider</h4></td>
+                <td data-field='no'><h4>No of Transaction</h4></td>
+                <td data-field='amount'><h4>Total Amount</h4></td>
+                </tr>
+            </thead>
+            <tbody>
+            {%for item in complete%}
+                <tr>
+                    <td>{{item.service_provider}}</td>
+                    <td class = 'rowData'>{{item[1]}}</td>
+                    <td class = 'rowData'>{{item[2]}}</td>
+                </tr>
+            {%endfor%}
+                <tr class='totalColumn panel-footer'>
+                    <td><strong>Total</strong></td>
+                    <td class = 'totalData'></td>
+                    <td class = 'totalData'></td>
+                </tr>
+            </tbody>
+        </table>
+    </div><!--#complete-->
+
+    <div class='panel panel-default table-responsive panel-danger' id='cancel'>
+        <div class ='panel-heading'>
+            <h3 class='panel-title'>
+                Cancelled
+            </h3>
+        </div><!--.panel-heading-->
+
+            <table class='table table-bordered' data-sort-name='service_provider' data-sort-order='desc'>
+                <thead>
+                    <tr>
+                    <td data-field='service_provider'><h4>Service Provider</h4></td>
+                    <td data-field='no'><h4>No of Transaction</h4></td>
+                    <td data-field='amount'><h4>Total Amount</h4></td>
+                    </tr>
+                </thead>
+                <tbody>
+                {%for item in cancel%}
+                    <tr>
+                        <td>{{item.service_provider}}</td>
+                        <td class = 'rowData'>{{item[1]}}</td>
+                        <td class = 'rowData'>{{item[2]}}</td>
+                    </tr>
+                {%endfor%}
+                    <tr class='totalColumn panel-footer'>
+                        <td><strong>Total</strong></td>
+                        <td class = 'totalData'></td>
+                        <td class = 'totalData'></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div><!--/#cancel-->
+
+</div><!--#total-->
+
+
 {%endblock%}

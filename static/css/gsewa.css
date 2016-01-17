@@ -5,13 +5,21 @@
     display: inline-block;
 }
 #complete,#cancel{
-	width:320px;
+	width:330px;
 	height:auto;
 	float:left;
-    clear: right;
     display: inline-block;
+    overflow: hidden;
+    margin-left: 10px;
 }
 
 .totalData{
     font-weight: bold;
+}
+ 
+#total{
+	width:330px;
+	height: auto;
+	float:left;
+	clear:right;
 }
