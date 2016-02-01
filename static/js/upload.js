@@ -18,11 +18,11 @@ $('#upload').dmUploader({
          	// process results here
         		if(data.state ==="SUCCESS"){
           			console.log('Success');
-          			window.location.href = 'http://127.0.0.1:5000/payment/all';
+          			window.location.href = '/payment/all';
         		}
         		else{
-          			console.log('pending');
-        			setTimeout(Poll,1000);
+          			console.log(data.state);
+        			setTimeout(Poll,3000);
       			}
 
     		});

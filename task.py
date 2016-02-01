@@ -16,7 +16,8 @@ def doc_open(doc_name):
     sheet = workbook.sheet_by_index(0)
     return sheet
 # insert data
-
+db.drop_all()
+db.create_all()
 def info(doc_name):
     id_row = 3
     id_col = 10
@@ -30,7 +31,7 @@ def command_execute(table,service_provider,service,service_name,service_type,amo
         db.session.add(Payment(service_provider,service,service_name,service_type,float(amount),status,time))
     else:
         db.session.add(Cashback(service_provider,service,service_name,service_type,float(amount),status,time))
-    
+
 
 @celery.task(bind=True)
 def populate(self,doc_name):

@@ -32,7 +32,7 @@ db = SQLAlchemy(app)
 from models import *
 from task import *
 
-info = db.session.query(Info).first()
+
 
 
 def allowed_file(filename):
@@ -47,6 +47,7 @@ def index():
 
 @app.route('/payment/<service_provider>')
 def payment(service_provider):
+    info = db.session.query(Info).first()
     if service_provider.lower() == 'all':
         payments = db.session.query(Payment).all()
     else:
@@ -62,6 +63,7 @@ def payment(service_provider):
 
 @app.route('/cashback/<service_provider>')
 def cashback(service_provider='all'):
+
     if service_provider.lower() == 'all' or service_provider is None:
         cashbacks = db.session.query(Cashback).all()
     else:
@@ -69,6 +71,7 @@ def cashback(service_provider='all'):
             service_provider=service_provider.upper())
     total = db.session.query(Cashback.service_provider, func.count(
         Cashback.amount), func.sum(Cashback.amount)).group_by(Cashback.service_provider)
+    info = db.session.query(Info).first()
     return render_template('cashback.html', cashbacks=cashbacks, service_provider=service_provider, total=total, info=info)
 
 
@@ -78,7 +81,7 @@ def process():
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            filedir = os.path.join(os.getcwd(), 'upload', filename)
+            filedir = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filedir)
             task = populate.apply_async(args=[filedir])
             return jsonify({'location': url_for('taskstatus', task_id=task.id)}) 
@@ -112,4 +115,4 @@ def taskstatus(task_id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
