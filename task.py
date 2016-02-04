@@ -1,5 +1,5 @@
 from gsewa import app, db ,make_celery
-from models import Payment, Cashback, Info
+from models import Payment, Cashback, Info, Transfer
 from parse import * 
 import xlrd as x
 
