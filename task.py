@@ -88,11 +88,9 @@ def populate(self,doc_name):
             command_execute('cashback','SIM',desc,'sim commission','Transfer',credit,status,time)
         elif refine('WEBSURFER.COM',desc):
             command_execute('payment','WEBSURFER',desc,'websurfer','Payment',credit,status,time)
-<<<<<<< HEAD
         elif refine('Cash Back',desc):
             command_execute('cashback','WEBSURFER',desc,'websurfer','Payment',debit,status,time)
-=======
->>>>>>> 730cd1caa0d3ce273d5e0cedeee5244880c759f9
+
         elif refine('topup',desc):
             if refine('prepaid',desc):
                 command_execute('payment','NTC',desc,'prepaid','Topup',debit,status,time)
