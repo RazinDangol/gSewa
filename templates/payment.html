@@ -51,8 +51,12 @@
             </thead>
             <tbody>
             {%for item in complete%}
-                <tr>
-                    <td>{{item.service_provider}}</td>
+            <tr>
+                {%if item.service_name%}
+                    <td>{{item.service_name | capitalize}}</td>
+                {%else%}
+                    <td>{{item.service_provider | capitalize}}</td>
+                {%endif%}
                     <td class = 'rowData'>{{item[1]}}</td>
                     <td class = 'rowData'>{{item[2]}}</td>
                 </tr>
@@ -84,7 +88,11 @@
                 <tbody>
                 {%for item in cancel%}
                     <tr>
-                        <td>{{item.service_provider}}</td>
+                    {%if item.service_name%}
+                        <td>{{item.service_name | capitalize}}</td>
+                    {%else%}
+                        <td>{{item.service_provider | capitalize}}</td>
+                    {%endif%}
                         <td class = 'rowData'>{{item[1]}}</td>
                         <td class = 'rowData'>{{item[2]}}</td>
                     </tr>

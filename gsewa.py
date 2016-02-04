@@ -50,28 +50,33 @@ def payment(service_provider):
     info = db.session.query(Info).first()
     if service_provider.lower() == 'all':
         payments = db.session.query(Payment).all()
+        complete = db.session.query(Payment.service_provider, func.count(
+        Payment.amount), func.sum(Payment.amount)).filter(Payment.status == "COMPLETE").group_by(Payment.service_provider)
+        cancel = db.session.query(Payment.service_provider, func.count(
+        Payment.amount), func.sum(Payment.amount)).filter(Payment.status == "CANCELED").group_by(Payment.service_provider)
     else:
         payments = db.session.query(Payment).filter_by(
             service_provider=service_provider.upper())
-    complete = db.session.query(Payment.service_provider, func.count(
-        Payment.amount), func.sum(Payment.amount)).filter(Payment.status == "COMPLETE").group_by(Payment.service_provider)
-    cancel = db.session.query(Payment.service_provider, func.count(
-        Payment.amount), func.sum(Payment.amount)).filter(Payment.status == "CANCELED").group_by(Payment.service_provider)
+        complete = db.session.query(Payment.service_name, func.count(
+        Payment.amount), func.sum(Payment.amount)).filter(Payment.status == "COMPLETE").filter_by(service_provider=service_provider.upper()).group_by(Payment.service_name)
+        cancel = db.session.query(Payment.service_name, func.count(
+        Payment.amount), func.sum(Payment.amount)).filter(Payment.status == "CANCELED").filter_by(service_provider=service_provider.upper()).group_by(Payment.service_name)
 
     return render_template('payment.html', payments=payments, service_provider=service_provider, complete=complete,cancel=cancel, info=info)
 
 
 @app.route('/cashback/<service_provider>')
 def cashback(service_provider='all'):
-
+    info = db.session.query(Info).first()
     if service_provider.lower() == 'all' or service_provider is None:
         cashbacks = db.session.query(Cashback).all()
+        total = db.session.query(Cashback.service_provider, func.count(
+        Cashback.amount), func.sum(Cashback.amount)).group_by(Cashback.service_provider)
     else:
         cashbacks = db.session.query(Cashback).filter_by(
             service_provider=service_provider.upper())
-    total = db.session.query(Cashback.service_provider, func.count(
-        Cashback.amount), func.sum(Cashback.amount)).group_by(Cashback.service_provider)
-    info = db.session.query(Info).first()
+        total = db.session.query(Cashback.service_name, func.count(
+        Cashback.amount), func.sum(Cashback.amount)).filter_by(service_provider=service_provider.upper()).group_by(Cashback.service_name)
     return render_template('cashback.html', cashbacks=cashbacks, service_provider=service_provider, total=total, info=info)
 
 @app.route('/transfer/<service_provider>')
@@ -87,7 +92,6 @@ def transfer(service_provider='all'):
         Transfer.amount), func.sum(Transfer.amount)).filter_by(
     service_name='transferred').group_by(Transfer.name)
     info = db.session.query(Info).first()
-    print(transferred)
     return render_template('transfer.html', transfers=transfers, service_provider=service_provider, received=received,transferred= transferred, info=info)
 
 @app.route('/process', methods=['POST'])
