@@ -81,10 +81,14 @@ def transfer(service_provider='all'):
     else:
         transfers = db.session.query(Transfer).filter_by(
             service_provider=service_provider.upper())
-    total = db.session.query(Transfer.service_provider, func.count(
-        Transfer.amount), func.sum(Transfer.amount)).group_by(Transfer.service_provider)
+    received = db.session.query(Transfer.name, func.count(
+        Transfer.amount), func.sum(Transfer.amount)).filter_by(service_name='received').group_by(Transfer.name)
+    transferred = db.session.query(Transfer.name, func.count(
+        Transfer.amount), func.sum(Transfer.amount)).filter_by(
+    service_name='transferred').group_by(Transfer.name)
     info = db.session.query(Info).first()
-    return render_template('transfer.html', transfers=transfers, service_provider=service_provider, total=total, info=info)
+    print(transferred)
+    return render_template('transfer.html', transfers=transfers, service_provider=service_provider, received=received,transferred= transferred, info=info)
 
 @app.route('/process', methods=['POST'])
 def process():

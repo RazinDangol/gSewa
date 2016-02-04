@@ -53,7 +53,8 @@ class Transfer(db.Model):
     amount = db.Column(db.Integer)
     status = db.Column(db.String)
     time = db.Column(db.String)
-    def __init__(self,service_provider,service,service_name,service_type,amount,status,time):
+    name = db.Column(db.String)
+    def __init__(self,service_provider,service,service_name,service_type,amount,status,time,name):
         self.service_provider = service_provider
         self.service = service
         self.service_name = service_name
@@ -61,6 +62,7 @@ class Transfer(db.Model):
         self.amount = amount
         self.status = status
         self.time = time
+        self.name = name
     def __repr__(self):
         return '{}'.format(self.service_provider)
 

@@ -32,7 +32,7 @@ def command_execute(table,service_provider,service,service_name,service_type,amo
     elif table =='cashback':
         db.session.add(Cashback(service_provider,service,service_name,service_type,float(amount),status,time))
     else:
-        db.session.add(Transfer(service_provider,service,service_name,service_type,float(amount),status,time))
+        pass
 
 @celery.task(bind=True)
 def populate(self,doc_name):
@@ -123,9 +123,14 @@ def populate(self,doc_name):
             else:
                 pass
         elif refine('Money Transfer',desc):
-            command_execute('transfer','BANK',desc,'bank','Transfer',credit,status,time)
+            db.session.add(Transfer('BANK',desc,'received','Transfer',float(credit),status,time,desc.replace('Money Transferred from ','')))
         elif refine('Balance Transfer',desc):
-            command_execute('transfer','PEER',desc,'peer','Transfer',credit,status,time)
+            if refine('to',desc):
+                db.session.add(Transfer('PEER',desc,'transferred','Transfer',float(debit),status,time,desc.replace('Balance Transferred to ','')))
+            
+            else:
+                db.session.add(Transfer('PEER',desc,'received','Transfer',float(credit),status,time,desc.replace('Balance Transferred by ','')))
+                
         else:
             pass
         row+=1
