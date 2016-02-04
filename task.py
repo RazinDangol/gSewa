@@ -86,7 +86,8 @@ def populate(self,doc_name):
                 pass
         elif refine('sim commission',desc):
             command_execute('cashback','SIM',desc,'sim commission','Transfer',credit,status,time)
-
+        elif refine('WEBSURFER.COM',desc):
+            command_execute('payment','WEBSURFER',desc,'websurfer','Payment',credit,status,time)
         elif refine('topup',desc):
             if refine('prepaid',desc):
                 command_execute('payment','NTC',desc,'prepaid','Topup',debit,status,time)
