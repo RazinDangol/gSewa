@@ -29,9 +29,10 @@ def info(doc_name):
 def command_execute(table,service_provider,service,service_name,service_type,amount,status,time):
     if table == 'payment':
         db.session.add(Payment(service_provider,service,service_name,service_type,float(amount),status,time))
-    else:
+    elif table =='cashback':
         db.session.add(Cashback(service_provider,service,service_name,service_type,float(amount),status,time))
-
+    else:
+        db.session.add(Transfer(service_provider,service,service_name,service_type,float(amount),status,time))
 
 @celery.task(bind=True)
 def populate(self,doc_name):
@@ -123,7 +124,6 @@ def populate(self,doc_name):
                 pass
         elif refine('Money Transfer',desc):
             command_execute('transfer','BANK',desc,'bank','Transfer',credit,status,time)
-                pass
         elif refine('Balance Transfer',desc):
             command_execute('transfer','PEER',desc,'peer','Transfer',credit,status,time)
         else:
