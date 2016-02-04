@@ -74,6 +74,17 @@ def cashback(service_provider='all'):
     info = db.session.query(Info).first()
     return render_template('cashback.html', cashbacks=cashbacks, service_provider=service_provider, total=total, info=info)
 
+@app.route('/transfer/<service_provider>')
+def transfer(service_provider='all'):
+    if service_provider.lower() == 'all' or service_provider is None:
+        transfers = db.session.query(Transfer).all()
+    else:
+        transfers = db.session.query(Transfer).filter_by(
+            service_provider=service_provider.upper())
+    total = db.session.query(Transfer.service_provider, func.count(
+        Transfer.amount), func.sum(Transfer.amount)).group_by(Transfer.service_provider)
+    info = db.session.query(Info).first()
+    return render_template('transfer.html', transfers=transfers, service_provider=service_provider, total=total, info=info)
 
 @app.route('/process', methods=['POST'])
 def process():
@@ -109,9 +120,9 @@ def taskstatus(task_id):
         response={
         'state':task.state,
         }
-
-    print(response)
     return jsonify(response)
+
+
 
 
 if __name__ == '__main__':

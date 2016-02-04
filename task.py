@@ -121,6 +121,11 @@ def populate(self,doc_name):
                 command_execute('payment','DISHHOME',desc,'dishhome','Recharge Card',debit,status,time)
             else:
                 pass
+        elif refine('Money Transfer',desc):
+            command_execute('transfer','BANK',desc,'bank','Transfer',credit,status,time)
+                pass
+        elif refine('Balance Transfer',desc):
+            command_execute('transfer','PEER',desc,'peer','Transfer',credit,status,time)
         else:
             pass
         row+=1
