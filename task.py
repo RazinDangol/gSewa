@@ -68,7 +68,7 @@ def populate(self,doc_name):
             elif refine('landline',desc):
                 command_execute('cashback','NTC',desc,'landline','Topup',credit,status,time)
             elif refine('NT Recharge Card',desc):
-                command_execute('cashback','NTC',desc,'recharge_card','Recharge Card',credit,status,time)
+                command_execute('cashback','NTC',desc,'recharge card','Recharge Card',credit,status,time)
             elif refine('Ncell', desc):
                 command_execute('cashback','NCELL',desc,'prepaid','Topup',credit,status,time)              
             elif refine('SIM TV Payment', desc):
@@ -76,11 +76,11 @@ def populate(self,doc_name):
             elif refine('Worldlink', desc):
                 command_execute('cashback','WORLDLINK',desc,'worldlink','Topup',credit,status,time)
             elif refine('UTL', desc):
-                command_execute('cashback','UTL',desc,'utl','recharge_card',credit,status,time)
+                command_execute('cashback','UTL',desc,'utl','recharge card',credit,status,time)
             elif refine('Vianet', desc):
                 command_execute('cashback','VIANET',desc,'vianet','Topup',credit,status,time)    
             elif refine('eSewa', desc):  # Greedy Sewa cash back is assumed to be cashback of dish home recharge card
-                command_execute('cashback','DISHHOME',desc,'recharge_card','Topup',credit,status,time)
+                command_execute('cashback','DISHHOME',desc,'recharge card','Topup',credit,status,time)
             elif refine('subisu', desc):
                 command_execute('cashback','SUBISU',desc,'subisu','Topup',credit,status,time)
             else: 
@@ -102,7 +102,7 @@ def populate(self,doc_name):
             elif refine('landline',desc):
                 command_execute('payment','NTC',desc,'landline','Topup',debit,status,time)
             elif refine('7190*',desc):
-                command_execute('payment','DISHHOME',desc,'dishhome','Topup',debit,status,time)
+                command_execute('payment','DISHHOME',desc,'topup','Topup',debit,status,time)
             elif refine('1000*',desc):
                 command_execute('payment','SIMTV',desc,'simtv','Topup',debit,status,time)
             else: pass
@@ -119,7 +119,7 @@ def populate(self,doc_name):
             if refine('NTGSM',desc):
                 command_execute('payment','NTC',desc,'ntcgsm','Recharge Card',debit,status,time)
             elif refine('DHOME',desc):
-                command_execute('payment','DISHHOME',desc,'dishhome','Recharge Card',debit,status,time)
+                command_execute('payment','DISHHOME',desc,'recharge card','Recharge Card',debit,status,time)
             else:
                 pass
         elif refine('Money Transfer',desc):
