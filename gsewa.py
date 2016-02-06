@@ -48,6 +48,7 @@ def index():
 @app.route('/payment/<service_provider>')
 def payment(service_provider):
     info = db.session.query(Info).first()
+    service_providers = db.session.query(Payment.service_provider).group_by(Payment.service_provider)
     if service_provider.lower() == 'all':
         payments = db.session.query(Payment).all()
         complete = db.session.query(Payment.service_provider, func.count(
@@ -62,12 +63,13 @@ def payment(service_provider):
         cancel = db.session.query(Payment.service_name, func.count(
         Payment.amount), func.sum(Payment.amount)).filter(Payment.status == "CANCELED").filter_by(service_provider=service_provider.upper()).group_by(Payment.service_name)
 
-    return render_template('payment.html', payments=payments, service_provider=service_provider, complete=complete,cancel=cancel, info=info)
+    return render_template('payment.html', payments=payments,service_providers = service_providers, complete=complete,cancel=cancel, info=info)
 
 
 @app.route('/cashback/<service_provider>')
 def cashback(service_provider='all'):
     info = db.session.query(Info).first()
+    service_providers = db.session.query(Cashback.service_provider).group_by(Cashback.service_provider)
     if service_provider.lower() == 'all' or service_provider is None:
         cashbacks = db.session.query(Cashback).all()
         total = db.session.query(Cashback.service_provider, func.count(
@@ -77,7 +79,7 @@ def cashback(service_provider='all'):
             service_provider=service_provider.upper())
         total = db.session.query(Cashback.service_name, func.count(
         Cashback.amount), func.sum(Cashback.amount)).filter_by(service_provider=service_provider.upper()).group_by(Cashback.service_name)
-    return render_template('cashback.html', cashbacks=cashbacks, service_provider=service_provider, total=total, info=info)
+    return render_template('cashback.html', cashbacks=cashbacks, total=total, info=info,service_providers=service_providers)
 
 @app.route('/transfer/<service_provider>')
 def transfer(service_provider='all'):

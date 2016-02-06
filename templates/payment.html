@@ -3,6 +3,15 @@
 {{info.esewa_id}}
 {%endblock%}
 {%block main_table%}
+<div class='container'>
+<ul class='nav nav-pills'>
+    <li {% if request.url|replace(request.url_root+'payment/','') == 'all' %} class='active'{%endif%}><a href='all'>ALL</a></li>
+    {%for item in service_providers%}
+    
+        <li {% if request.url|replace(request.url_root+'payment/','') == item.service_provider|lower %} class = 'active' {%endif%}><a href='{{item.service_provider| lower}}'>{{item.service_provider}}</a></li>
+    {%endfor%}
+</ul>
+</div>
 <div class='container table-responsive' id='data'>
 <table class='table table-bordered' id='table1'>
 <thead>
