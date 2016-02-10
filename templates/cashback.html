@@ -1,4 +1,7 @@
 {%extends 'layout.html'%}
+{%block title%}
+<title>Cashbacks || {{request.url|replace(request.url_root+'cashback/','')|upper}}</title>
+{%endblock%}
 {%block id%}
 {{info.esewa_id}}
 {%endblock%}

@@ -1,4 +1,7 @@
 {%extends 'layout.html'%}
+{%block title%}
+<title>Payments || {{request.url|replace(request.url_root+'payment/','')|upper}}</title>
+{%endblock%}
 {%block id%}
 {{info.esewa_id}}
 {%endblock%}

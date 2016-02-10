@@ -4,7 +4,6 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Greedy Sewa v 0.1</title>
         <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.css')}}">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.9.1/bootstrap-table.min.css">
         <link rel="stylesheet" href="{{url_for('static',filename='css/gsewa.css')}}">
@@ -13,7 +12,8 @@
         <script src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.js"></script>
         <script type="text/javascript" src='{{url_for('static',filename='js/gsewa.js')}}'></script>
-        
+        {%block title%}
+        {%endblock%}
       
     </head>
     <body>
