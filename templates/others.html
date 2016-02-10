@@ -1,0 +1,49 @@
+{%extends 'layout.html'%}
+{%block id%}
+{{info.esewa_id}}
+{%endblock%}
+
+{%block main_table%}
+<div class='container' id = 'data'>
+<table class='table table-bordered'  id='table1'>
+<thead>
+    <tr>
+        <td>Service Provider</td>
+        <td>Description </td>
+        <td>Service Name</td>
+        <td>Type</td>
+        <td>Amount</td>
+        <td>Status</td>
+        <td>Time</td>
+    </tr>
+</thead>
+<tbody>
+{%for other in others%}
+    <tr>
+        <td>{{ other.service_provider }}</td>
+        <td>{{ other.service }}</td>
+        <td>{{ other.service_name }}</td>
+        <td>{{ other.service_type }}</td>
+        <td>{{ other.amount }}</td>
+        <td>{{ other.status }}</td> 
+        <td>{{ other.time }}</td>
+    </tr>
+{%endfor%}
+</tbody>
+</table>
+</div>
+{%endblock%}
+
+{%block total%}
+<div class='container' id='total'>
+    <div class='panel panel-default table-responsive panel-primary' id='complete'>
+        <div class ='panel-heading'>
+            <h3 class='panel-title'>
+                About This page
+            </h3>
+        </div><!--.panel-heading-->
+        <blockquote>
+        <p>The <cite title='program name'>gSewa</cite> is so immature that it forget to recognise these transaction.Sorry, but don't worry I will soon teach him to recognise these transaction :)</p>
+        <footer><cite title='Author'>Razin Dangol</cite></footer>
+        </blockquote>
+{%endblock%}

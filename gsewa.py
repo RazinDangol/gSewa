@@ -96,6 +96,13 @@ def transfer(service_provider='all'):
     info = db.session.query(Info).first()
     return render_template('transfer.html', transfers=transfers, service_provider=service_provider, received=received,transferred= transferred, info=info)
 
+@app.route('/other',methods=['GET'])
+def other():
+    info = db.session.query(Info).first()
+    others = db.session.query(Other).all()
+    return render_template('others.html',others=others,info=info)
+
+
 @app.route('/process', methods=['POST'])
 def process():
     if request.method == 'POST':
@@ -109,6 +116,7 @@ def process():
         else:
             flash('Please upload datasheet of excel format')
             return redirect(url_for('index'))
+
 
 
 @app.route('/status/<task_id>')

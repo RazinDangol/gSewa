@@ -1,5 +1,5 @@
 from gsewa import app, db ,make_celery
-from models import Payment, Cashback, Info, Transfer
+from models import Payment, Cashback, Info, Transfer, Other
 from parse import * 
 import xlrd as x
 
@@ -132,7 +132,10 @@ def populate(self,doc_name):
                 db.session.add(Transfer('PEER',desc,'received','Transfer',float(credit),status,time,desc.replace('Balance Transferred by ','')))
                 
         else:
-            pass
+            if float(credit) != 0:
+                db.session.add(Other('other',desc,' Unknown Cashback','cashback',float(credit),status,time))
+            else:
+                db.session.add(Other('other',desc,' Unknown Payment','payment',float(debit),status,time))
         row+=1
     db.session.commit()
     return {'result':'Task Completed'}
