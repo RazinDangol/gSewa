@@ -10,7 +10,6 @@ $(document).ready(function(){
             });
             
 	$('#complete td.totalData').each(function(i){
-    console.log(this);
     $(this).html(complete[i]);
 });
     var $dataRows=$("#cancel tr:not('.totalData')");
@@ -21,7 +20,6 @@ $(document).ready(function(){
             });
             
     $('#cancel td.totalData').each(function(i){
-    console.log(this);
     $(this).html(cancel[i]);
 
 

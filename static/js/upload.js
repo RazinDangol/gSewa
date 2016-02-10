@@ -21,7 +21,6 @@ $('#upload').dmUploader({
           			window.location.href = '/payment/all';
         		}
         		else{
-          			console.log(data.state);
         			setTimeout(Poll,3000);
       			}
 
