@@ -70,7 +70,7 @@
                 <td>{{item.service_provider | capitalize}}</td>
                 {%endif%}
                 <td class = 'rowData'>{{item[1]}}</td>
-                <td class = 'rowData'>{{item[2]}}</td>
+                <td class = 'rowData'>{{'{:.2f}'.format(item[2])}}</td>
             </tr>
         {%endfor%}
             <tr class='totalColumn'>
