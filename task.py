@@ -81,10 +81,10 @@ def populate(self,doc_name):
                 command_execute('cashback','VIANET',desc,'vianet','Topup',credit,status,time)    
             elif refine('eSewa', desc):  # Greedy Sewa cash back is assumed to be cashback of dish home recharge card
                 command_execute('cashback','DISHHOME',desc,'recharge card','Topup',credit,status,time)
-            elif refine('subisu', desc):
+            elif refine('SUBISU', desc):
                 command_execute('cashback','SUBISU',desc,'subisu','Topup',credit,status,time)
             else: 
-                pass
+                command_execute('other','other',desc,'unknown','Topup',credit,status,time)
         elif refine('sim commission',desc):
             command_execute('cashback','SIM',desc,'sim commission','Transfer',credit,status,time)
         elif refine('WEBSURFER.COM',desc):
@@ -105,7 +105,8 @@ def populate(self,doc_name):
                 command_execute('payment','DISHHOME',desc,'topup','Topup',debit,status,time)
             elif refine('1000*',desc):
                 command_execute('payment','SIMTV',desc,'simtv','Topup',debit,status,time)
-            else: pass
+            else:
+            	command_execute('other','other',desc,'unknown','Topup',debit,status,time)
         elif refine('payment',desc):
             if refine('980*',desc) or refine('981*',desc):
                 command_execute('payment','NCELL',desc,'ncell','Topup',debit,status,time)
@@ -114,14 +115,16 @@ def populate(self,doc_name):
             elif refine('NEA BILL',desc):
                 command_execute('payment','NEA',desc,'nea','Payment',debit,status,time)
             else:
-                pass
+                command_execute('other','other',desc,'unknown','Payment',debit,status,time)
         elif refine('Bought recharge',desc):
             if refine('NTGSM',desc):
                 command_execute('payment','NTC',desc,'ntcgsm','Recharge Card',debit,status,time)
             elif refine('DHOME',desc):
                 command_execute('payment','DISHHOME',desc,'recharge card','Recharge Card',debit,status,time)
+            elif refine('NTCDMA',desc):
+            	command_execute('payment','NTC',desc,'ntrecharge','Recharge Card',debit,status,time)
             else:
-                pass
+                command_execute('other','other',desc,'unknown','Recharge Card',debit,status,time)
         elif refine('Money Transfer',desc):
             db.session.add(Transfer('BANK',desc,'received','Transfer',float(credit),status,time,desc.replace('Money Transferred from ','')))
         elif refine('Balance Transfer',desc):
