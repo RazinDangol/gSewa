@@ -106,7 +106,7 @@ def populate(self,doc_name):
             elif refine('1000*',desc):
                 command_execute('payment','SIMTV',desc,'simtv','Topup',debit,status,time)
             else:
-            	command_execute('other','other',desc,'unknown','Topup',debit,status,time)
+                command_execute('other','other',desc,'unknown','Topup',debit,status,time)
         elif refine('payment',desc):
             if refine('980*',desc) or refine('981*',desc):
                 command_execute('payment','NCELL',desc,'ncell','Topup',debit,status,time)
@@ -122,7 +122,7 @@ def populate(self,doc_name):
             elif refine('DHOME',desc):
                 command_execute('payment','DISHHOME',desc,'recharge card','Recharge Card',debit,status,time)
             elif refine('NTCDMA',desc):
-            	command_execute('payment','NTC',desc,'ntrecharge','Recharge Card',debit,status,time)
+                command_execute('payment','NTC',desc,'ntrecharge','Recharge Card',debit,status,time)
             else:
                 command_execute('other','other',desc,'unknown','Recharge Card',debit,status,time)
         elif refine('Money Transfer',desc):
@@ -135,10 +135,23 @@ def populate(self,doc_name):
                 db.session.add(Transfer('PEER',desc,'received','Transfer',float(credit),status,time,desc.replace('Balance Transferred by ','')))
                 
         else:
+            # saving unknown transaction description to file
+            f = open('unknown.lst','r')
+            lines = f.readlines()
+            f.close()
+
+            with open('unknown.lst','a+') as f:
+                if desc+'\n' not in lines:
+                    f.write(desc+'\n')
+                    lines.append(desc)
+                else:
+                    f.flush()  
+
             if float(credit) != 0:
                 db.session.add(Other('other',desc,' Unknown Cashback','cashback',float(credit),status,time))
             else:
                 db.session.add(Other('other',desc,' Unknown Payment','payment',float(debit),status,time))
+
         row+=1
     db.session.commit()
     return {'result':'Task Completed'}
