@@ -3,7 +3,6 @@ from models import Payment, Cashback, Info, Transfer, Other, Missing
 from parse import * 
 import xlrd as x
 import datetime
-import numpy as np
 from sqlalchemy.sql import func
 celery = make_celery(app)
 
