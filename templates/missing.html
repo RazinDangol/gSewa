@@ -1,0 +1,102 @@
+{%extends 'layout.html'%}
+{%block title%}
+<title>Missing || {{request.url|replace(request.url_root+'missing/','')|upper}}</title>
+{%endblock%}
+{%block id%}
+{{info.esewa_id}}
+{%endblock%}
+{%block main_table%}
+<div class='container'>
+<ul class='nav nav-pills'>
+    <li {% if request.url|replace(request.url_root+'missing/','') == 'all' %} class='active'{%endif%}><a href='all'>ALL</a></li>
+    {%for item in service_providers%}
+    
+        <li {% if request.url|replace(request.url_root+'missing/','') == item.service_provider|lower %} class = 'active' {%endif%}><a href='{{item.service_provider| lower}}'>{{item.service_provider}}</a></li>
+    {%endfor%}
+</ul>
+</div>
+
+<div class='container' id = 'data'>
+<table class='table table-bordered'  id='table1'>
+<thead>
+    <tr>
+        <td>Service Provider</td>
+        <td>Description </td>
+        <td>Service Name</td>
+        <td>Type</td>
+        <td>Amount</td>
+        <td>Status</td>
+        <td>Date</td>
+        <td>Time</td>
+    </tr>
+</thead>
+<tbody>
+{%for item in missings%}
+    <tr>
+        <td>{{ item.service_provider }}</td>
+        <td>{{ item.service }}</td>
+        <td>{{ item.service_name }}</td>
+        <td>{{ item.service_type }}</td>
+        <td>{{ item.amount }}</td>
+        <td>{{ item.status }}</td>
+        <td>{{ item.date }}</td> 
+        <td>{{ item.time }}</td>
+    </tr>
+{%endfor%}
+</tbody>
+</table>
+</div>
+{%endblock%}
+{%block total%}
+<div class='container' id='total'>
+    <div class='panel panel-default table-responsive panel-primary' id='complete'>
+        <div class ='panel-heading'>
+            <h3 class='panel-title'>
+                Total Missing
+            </h3>
+        </div><!--.panel-heading-->
+    
+    <table class='table table-bordered'>
+        <thead>
+            <tr>
+            <td data-field='service_provider'><h4>Service Provider</h4></td>
+            <td><h4>No of Transaction</h4></td>
+            <td><h4>Total Amount</h4></td>
+            </tr>
+        </thead>
+        <tbody>
+        {%for item in total%}
+            <tr>
+                {%if item.service_name%}
+                <td>{{item.service_name | capitalize}}</td>
+                {%else%}
+                <td>{{item.service_provider | capitalize}}</td>
+                {%endif%}
+                <td class = 'rowData'>{{item[1]}}</td>
+                <td class = 'rowData'>{{'{:.2f}'.format(item[2])}}</td>
+            </tr>
+        {%endfor%}
+            <tr class='totalColumn'>
+                <td><strong>Total</strong></td>
+                <td class = 'totalData'></td>
+                <td class = 'totalData'></td>
+            </tr>
+        </tbody>
+    </table>
+</div><!--#complete-->
+<div class='container' id='total'>
+    <div class='panel panel-default table-responsive panel-warning' id='complete'>
+        <div class ='panel-heading'>
+            <h3 class='panel-title'>
+                WARNING
+            </h3>
+        </div><!--.panel-heading-->
+        <blockquote>
+        <p>This <strong>Missing page</strong> data is Tentative and I cannot guarantee it's correctness so it is better to check data from <strong><a a href='{{url_for('payment',service_provider='all')}}'>Payment</a></strong> and <strong><a href='{{ url_for('payment',service_provider='all')}}'>Cashback</a></strong> before coming to this page</p>
+        <footer><cite title='Author'>Razin Dangol</cite></footer>
+        </blockquote>
+</div>
+
+</div>
+
+{%endblock%}

@@ -18,6 +18,8 @@ $('#upload').dmUploader({
          	// process results here
         		if(data.state ==="SUCCESS"){
           			console.log('Success');
+                console.log('Queuing Background Missing job');
+                $.get('/job')
           			window.location.href = '/payment/all';
         		}
         		else{

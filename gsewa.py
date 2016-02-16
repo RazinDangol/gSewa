@@ -3,6 +3,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from werkzeug import secure_filename
 import os
+import datetime
 # Making celery instance
 from celery import Celery
 app = Flask(__name__)
@@ -47,6 +48,7 @@ def index():
 
 @app.route('/payment/<service_provider>')
 def payment(service_provider):
+    
     info = db.session.query(Info).first()
     service_providers = db.session.query(Payment.service_provider).group_by(Payment.service_provider)
     if service_provider.lower() == 'all':
@@ -139,9 +141,26 @@ def taskstatus(task_id):
         'state':task.state,
         }
     return jsonify(response)
+@app.route('/job')
+def missing_job():
+    missing_job = missing_task.apply_async()
+    return 'Analysing data....'
 
-
-
+@app.route('/missing/<service_provider>')
+def missing(service_provider):
+    
+    info = db.session.query(Info).first()
+    service_providers = db.session.query(Cashback.service_provider).group_by(Cashback.service_provider)
+    if service_provider.lower() == 'all' or service_provider is None:
+        missings = db.session.query(Missing).all()
+        total = db.session.query(Missing.service_provider, func.count(
+        Missing.amount), func.sum(Missing.amount)).group_by(Missing.service_provider)
+    else:
+        missings = db.session.query(Missing).filter_by(
+            service_provider=service_provider.upper())
+        total = db.session.query(Missing.service_name, func.count(
+        Missing.amount), func.sum(Missing.amount)).filter_by(service_provider=service_provider.upper()).group_by(Missing.service_name)
+    return render_template('missing.html', missings=missings, total=total, info=info,service_providers=service_providers)
 
 if __name__ == '__main__':
     app.run()

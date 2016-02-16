@@ -1,8 +1,10 @@
 from gsewa import app, db ,make_celery
-from models import Payment, Cashback, Info, Transfer, Other
+from models import Payment, Cashback, Info, Transfer, Other, Missing
 from parse import * 
 import xlrd as x
 import datetime
+import numpy as np
+from sqlalchemy.sql import func
 celery = make_celery(app)
 
 
@@ -159,5 +161,43 @@ def populate(self,doc_name):
     return {'result':'Task Completed'}
 
 
-# Commit the changes
+@celery.task()
+def missing_task():
+    successful=[]
+    missing=[]
+    '''
+    service_providers=[]
+    payment_check = db.session.query(func.count(Payment.amount),Payment.service_provider).filter(Payment.status=='COMPLETE').group_by(Payment.service_provider)
+ 
+    for payment in payment_check:
+        cashback_check = db.session.query(func.count(Cashback.amount),Cashback.service_provider).filter_by(service_provider=payment.service_provider).group_by(Cashback.service_provider).first()
+        c = [cashback for cashback in cashback_check]
+        if payment[0] != c[0]:
+            service_providers.append(payment.service_provider)
+    print(service_providers)
+    '''
+    payment = db.session.query(Payment)
+    for i in payment: 
+        if i.status != 'COMPLETE' or i.service_provider=='NEA':
+            continue
+        payment_time = i.time.split(':')
+        payment_date = i.date
+        p_time = datetime.timedelta(hours=int(payment_time[0]),minutes=int(payment_time[1]),seconds=int(payment_time[2]))
+        cashback_times = db.session.query(Cashback.time).filter_by(date=payment_date)
+        for j in cashback_times:
+            cashback_time = j.time.split(':')
+            c_time = datetime.timedelta(hours=int(cashback_time[0]),minutes=int(cashback_time[1]),seconds=int(cashback_time[2]))
+            if (c_time - p_time).seconds >= 0 and (c_time - p_time).seconds < 35:
+                successful.append(i.date + ' ' +i.time)
+                break
+            else:
+                pass
+        missing.append(i.date + ' ' +i.time)
+    m = [val for val in missing if val not in successful]
+    print(m)
+    for i in m:
+        d = i.split(' ')
+        q = db.session.query(Payment.service_provider,Payment.service,Payment.service_name,Payment.service_type,Payment.amount,Payment.status,Payment.date,Payment.time).filter_by(date=d[0],time=d[1]).first()
+        db.session.add(Missing(q.service_provider,q.service,q.service_name,q.service_type,q.amount,q.status,q.date,q.time))
+    print('Successful:',len(successful))
 
