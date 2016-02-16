@@ -2,7 +2,7 @@ from gsewa import app, db ,make_celery
 from models import Payment, Cashback, Info, Transfer, Other
 from parse import * 
 import xlrd as x
-
+import datetime
 celery = make_celery(app)
 
 
@@ -26,11 +26,11 @@ def info(doc_name):
     db.session.add(Info(esewa_id))
     db.session.commit()
 
-def command_execute(table,service_provider,service,service_name,service_type,amount,status,time):
+def command_execute(table,service_provider,service,service_name,service_type,amount,status,date,time):
     if table == 'payment':
-        db.session.add(Payment(service_provider,service,service_name,service_type,float(amount),status,time))
+        db.session.add(Payment(service_provider,service,service_name,service_type,float(amount),status,date,time))
     elif table =='cashback':
-        db.session.add(Cashback(service_provider,service,service_name,service_type,float(amount),status,time))
+        db.session.add(Cashback(service_provider,service,service_name,service_type,float(amount),status,date,time))
     else:
         pass
 
@@ -49,7 +49,9 @@ def populate(self,doc_name):
     while parse(sheet,row,des_col):
         self.update_state(state='PROGRESS')
         desc=parse(sheet,row,des_col)
-        time = parse(sheet,row,1)   
+        datetime = parse(sheet,row,1).split(' ')
+        date = datetime[0]
+        time = datetime[1]
         try:
             credit = float(parse(sheet, row, cre_col))
             debit = float (parse(sheet, row, deb_col))
@@ -60,79 +62,79 @@ def populate(self,doc_name):
         if refine('cashback', desc):  # cashback is common on most of the parsed data denoting profit
               # second most common data
             if refine('ADSL', desc):
-                command_execute('cashback','NTC',desc,'adsl','Topup',credit,status,time)
+                command_execute('cashback','NTC',desc,'adsl','Topup',credit,status,date,time)
             elif refine('prepaid', desc):
-                command_execute('cashback','NTC',desc,'prepaid','Topup',credit,status,time)
+                command_execute('cashback','NTC',desc,'prepaid','Topup',credit,status,date,time)
             elif refine('postpaid', desc):
-                command_execute('cashback','NTC',desc,'postpaid','Topup',credit,status,time)
+                command_execute('cashback','NTC',desc,'postpaid','Topup',credit,status,date,time)
             elif refine('landline',desc):
-                command_execute('cashback','NTC',desc,'landline','Topup',credit,status,time)
+                command_execute('cashback','NTC',desc,'landline','Topup',credit,status,date,time)
             elif refine('NT Recharge Card',desc):
-                command_execute('cashback','NTC',desc,'recharge card','Recharge Card',credit,status,time)
+                command_execute('cashback','NTC',desc,'recharge card','Recharge Card',credit,status,date,time)
             elif refine('Ncell', desc):
-                command_execute('cashback','NCELL',desc,'prepaid','Topup',credit,status,time)              
+                command_execute('cashback','NCELL',desc,'prepaid','Topup',credit,status,date,time)              
             elif refine('SIM TV Payment', desc):
-                command_execute('cashback','SIMTV',desc,'simtv','Topup',credit,status,time)
+                command_execute('cashback','SIMTV',desc,'simtv','Topup',credit,status,date,time)
             elif refine('Worldlink', desc):
-                command_execute('cashback','WORLDLINK',desc,'worldlink','Topup',credit,status,time)
+                command_execute('cashback','WORLDLINK',desc,'worldlink','Topup',credit,status,date,time)
             elif refine('UTL', desc):
-                command_execute('cashback','UTL',desc,'utl','recharge card',credit,status,time)
+                command_execute('cashback','UTL',desc,'utl','recharge card',credit,status,date,time)
             elif refine('Vianet', desc):
-                command_execute('cashback','VIANET',desc,'vianet','Topup',credit,status,time)    
+                command_execute('cashback','VIANET',desc,'vianet','Topup',credit,status,date,time)    
             elif refine('eSewa', desc):  # Greedy Sewa cash back is assumed to be cashback of dish home recharge card
-                command_execute('cashback','DISHHOME',desc,'recharge card','Topup',credit,status,time)
+                command_execute('cashback','DISHHOME',desc,'recharge card','Topup',credit,status,date,time)
             elif refine('SUBISU', desc):
-                command_execute('cashback','SUBISU',desc,'subisu','Topup',credit,status,time)
+                command_execute('cashback','SUBISU',desc,'subisu','Topup',credit,status,date,time)
             else: 
-                command_execute('other','other',desc,'unknown','Topup',credit,status,time)
+                command_execute('other','other',desc,'unknown','Topup',credit,status,date,time)
         elif refine('sim commission',desc):
-            command_execute('cashback','SIM',desc,'sim commission','Transfer',credit,status,time)
+            command_execute('cashback','SIM',desc,'sim commission','Transfer',credit,status,date,time)
         elif refine('WEBSURFER.COM',desc):
-            command_execute('payment','WEBSURFER',desc,'websurfer','Payment',debit,status,time)
+            command_execute('payment','WEBSURFER',desc,'websurfer','Payment',debit,status,date,time)
         elif refine('Cash Back',desc):
-            command_execute('cashback','WEBSURFER',desc,'websurfer','Payment',credit,status,time)
+            command_execute('cashback','WEBSURFER',desc,'websurfer','Payment',credit,status,date,time)
 
         elif refine('topup',desc):
             if refine('prepaid',desc):
-                command_execute('payment','NTC',desc,'prepaid','Topup',debit,status,time)
+                command_execute('payment','NTC',desc,'prepaid','Topup',debit,status,date,time)
             elif refine('postpaid',desc):
-                command_execute('payment','NTC',desc,'postpaid','Topup',debit,status,time)
+                command_execute('payment','NTC',desc,'postpaid','Topup',debit,status,date,time)
             elif refine('adsl',desc):
-                command_execute('payment','NTC',desc,'adsl','Topup',debit,status,time)
+                command_execute('payment','NTC',desc,'adsl','Topup',debit,status,date,time)
             elif refine('landline',desc):
-                command_execute('payment','NTC',desc,'landline','Topup',debit,status,time)
+                command_execute('payment','NTC',desc,'landline','Topup',debit,status,date,time)
             elif refine('7190*',desc):
-                command_execute('payment','DISHHOME',desc,'topup','Topup',debit,status,time)
+                command_execute('payment','DISHHOME',desc,'topup','Topup',debit,status,date,time)
             elif refine('1000*',desc):
-                command_execute('payment','SIMTV',desc,'simtv','Topup',debit,status,time)
+                command_execute('payment','SIMTV',desc,'simtv','Topup',debit,status,date,time)
             else:
-                command_execute('other','other',desc,'unknown','Topup',debit,status,time)
+                command_execute('other','other',desc,'unknown','Topup',debit,status,date,time)
         elif refine('payment',desc):
             if refine('980*',desc) or refine('981*',desc):
-                command_execute('payment','NCELL',desc,'ncell','Topup',debit,status,time)
+                command_execute('payment','NCELL',desc,'ncell','Topup',debit,status,date,time)
             elif refine('subisu',desc):
-                command_execute('payment','SUBISU',desc,'subisu','Payment',debit,status,time)
+                command_execute('payment','SUBISU',desc,'subisu','Payment',debit,status,date,time)
             elif refine('NEA BILL',desc):
-                command_execute('payment','NEA',desc,'nea','Payment',debit,status,time)
+                command_execute('payment','NEA',desc,'nea','Payment',debit,status,date,time)
             else:
-                command_execute('other','other',desc,'unknown','Payment',debit,status,time)
+                command_execute('other','other',desc,'unknown','Payment',debit,status,date,time)
         elif refine('Bought recharge',desc):
             if refine('NTGSM',desc):
-                command_execute('payment','NTC',desc,'ntcgsm','Recharge Card',debit,status,time)
+                command_execute('payment','NTC',desc,'ntcgsm','Recharge Card',debit,status,date,time)
             elif refine('DHOME',desc):
-                command_execute('payment','DISHHOME',desc,'recharge card','Recharge Card',debit,status,time)
+                command_execute('payment','DISHHOME',desc,'recharge card','Recharge Card',debit,status,date,time)
             elif refine('NTCDMA',desc):
-                command_execute('payment','NTC',desc,'ntrecharge','Recharge Card',debit,status,time)
+                command_execute('payment','NTC',desc,'ntrecharge','Recharge Card',debit,status,date,time)
             else:
-                command_execute('other','other',desc,'unknown','Recharge Card',debit,status,time)
+                command_execute('other','other',desc,'unknown','Recharge Card',debit,status,date,time)
         elif refine('Money Transfer',desc):
-            db.session.add(Transfer('BANK',desc,'received','Transfer',float(credit),status,time,desc.replace('Money Transferred from ','')))
+            db.session.add(Transfer('BANK',desc,'received','Transfer',float(credit),status,date,time,desc.replace('Money Transferred from ','')))
         elif refine('Balance Transfer',desc):
             if refine('to',desc):
-                db.session.add(Transfer('PEER',desc,'transferred','Transfer',float(debit),status,time,desc.replace('Balance Transferred to ','')))
+                db.session.add(Transfer('PEER',desc,'transferred','Transfer',float(debit),status,date,time,desc.replace('Balance Transferred to ','')))
             
             else:
-                db.session.add(Transfer('PEER',desc,'received','Transfer',float(credit),status,time,desc.replace('Balance Transferred by ','')))
+                db.session.add(Transfer('PEER',desc,'received','Transfer',float(credit),status,date,time,desc.replace('Balance Transferred by ','')))
                 
         else:
             # saving unknown transaction description to file
@@ -148,13 +150,14 @@ def populate(self,doc_name):
                     f.flush()  
 
             if float(credit) != 0:
-                db.session.add(Other('other',desc,' Unknown Cashback','cashback',float(credit),status,time))
+                db.session.add(Other('other',desc,' Unknown Cashback','cashback',float(credit),status,date,time))
             else:
-                db.session.add(Other('other',desc,' Unknown Payment','payment',float(debit),status,time))
+                db.session.add(Other('other',desc,' Unknown Payment','payment',float(debit),status,date,time))
 
         row+=1
     db.session.commit()
     return {'result':'Task Completed'}
+
 
 # Commit the changes
 
