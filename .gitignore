@@ -2,3 +2,6 @@ __pycache__
 *.xls
 *.pyc
 *.rdb
+*.txt
+*.lst
+*.db
