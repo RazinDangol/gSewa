@@ -7,7 +7,6 @@ import os
 
 # Making celery instance
 from celery import Celery
-import dataset
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
