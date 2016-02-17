@@ -13,6 +13,7 @@
     
         <li {% if request.url|replace(request.url_root+'missing/','') == item.service_provider|lower %} class = 'active' {%endif%}><a href='{{item.service_provider| lower}}'>{{item.service_provider}}</a></li>
     {%endfor%}
+    <button type='button' class='btn btn-danger' id='export'>Export to txt</button>
 </ul>
 </div>
 
@@ -92,11 +93,18 @@
             </h3>
         </div><!--.panel-heading-->
         <blockquote>
-        <p>This <strong>Missing page</strong> data is Tentative and I cannot guarantee it's correctness so it is better to check data from <strong><a a href='{{url_for('payment',service_provider='all')}}'>Payment</a></strong> and <strong><a href='{{ url_for('payment',service_provider='all')}}'>Cashback</a></strong> before coming to this page</p>
+        <p>This <strong>Missing page</strong> data is tentative and I cannot guarantee it's correctness so it is better to check data from <strong><a a href='{{url_for('payment',service_provider='all')}}'>Payment</a></strong> and <strong><a href='{{ url_for('payment',service_provider='all')}}'>Cashback</a></strong> before coming to this page</p>
         <footer><cite title='Author'>Razin Dangol</cite></footer>
         </blockquote>
 </div>
 
 </div>
-
+<script type="text/javascript">
+    console.log('Exporting data to text file')
+    $('#export').on('click',function(){
+    $.get('/job/export');
+    setTimeout('',2000);
+    location.href = '/export';
+});
+</script>
 {%endblock%}

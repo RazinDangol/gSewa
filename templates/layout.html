@@ -33,14 +33,10 @@
             <li><a href='{{url_for('other')}}'>Other</a></li>
             <li><a href='#'>Total</a></li>
         </ul>
-      <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn">Submit</button>
-      </form>
       <ul class="nav navbar-nav navbar-right">
+      <li><a href='#'>From:<strong>{{ info.from_date }}</strong></a></li><li><a href='#'> To:<strong>{{info.to_date}}</strong></a></li>
         <li><a href="#">Esewa Id: <strong>{%block id%}{%endblock%}</strong></a></li>
+        
       </ul>
     </div>
     <!-- /.navbar-collapse --> 
