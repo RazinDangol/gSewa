@@ -157,7 +157,7 @@ def missing(service_provider):
 
     info = db.session.query(Info).first()
     service_providers = db.session.query(
-        Cashback.service_provider).group_by(Cashback.service_provider)
+        Missing.service_provider).group_by(Missing.service_provider)
     if service_provider.lower() == 'all' or service_provider is None:
         missings = db.session.query(Missing).all()
         total = db.session.query(Missing.service_provider, func.count(
