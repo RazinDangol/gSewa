@@ -13,7 +13,7 @@
     
         <li {% if request.url|replace(request.url_root+'missing/','') == item.service_provider|lower %} class = 'active' {%endif%}><a href='{{item.service_provider| lower}}'>{{item.service_provider}}</a></li>
     {%endfor%}
-    <button type='button' class='btn btn-danger' id='export'>Export to txt</button>
+    <button type='button' class='btn btn-danger' id='export' style='margin-left: 20px;'>Export to txt</button>
 </ul>
 </div>
 
