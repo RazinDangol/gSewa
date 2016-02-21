@@ -3,6 +3,7 @@ from gsewa import app, db, make_celery
 from models import Payment, Cashback, Info, Transfer, Other, Missing
 from parse import *
 import xlrd as x
+from sqlalchemy import func
 celery = make_celery(app)
 
 
@@ -131,7 +132,11 @@ def populate(self, doc_name):
             command_execute(
                 'payment', 'WEBSURFER', desc, 'websurfer', 'Payment', debit, status, date, time)
         elif refine('Cash Back', desc):
-            command_execute('cashback', 'WEBSURFER', desc,
+            if refine('SUBISU',desc):
+                command_execute('cashback', 'SUBISU', desc,
+                            'subisu', 'Payment', credit, status, date, time)
+            else:
+                command_execute('cashback', 'WEBSURFER', desc,
                             'websurfer', 'Payment', credit, status, date, time)
 
         elif refine('topup', desc):
@@ -156,6 +161,7 @@ def populate(self, doc_name):
             else:
                 command_execute(
                     'other', 'other', desc, 'unknown', 'Topup', debit, status, date, time)
+
         elif refine('payment', desc):
             if refine('980*', desc) or refine('981*', desc):
                 command_execute(
@@ -169,6 +175,13 @@ def populate(self, doc_name):
             else:
                 command_execute(
                     'other', 'other', desc, 'unknown', 'Payment', debit, status, date, time)
+
+        elif refine('paid',desc):
+            if refine('VIANET',desc):
+                command_execute(
+                    'payment', 'VIANET', desc, 'vianet', 'Payment', debit, status, date, time)
+            else:
+                pass
         elif refine('Bought recharge', desc):
             if refine('NTGSM', desc):
                 command_execute(
@@ -222,21 +235,24 @@ def populate(self, doc_name):
 def missing_task():
     successful = []
     missing = []
-    '''
-    service_providers=[]
-    payment_check = db.session.query(func.count(Payment.amount),Payment.service_provider).filter(Payment.status=='COMPLETE').group_by(Payment.service_provider)
- 
-    for payment in payment_check:
-        cashback_check = db.session.query(func.count(Cashback.amount),Cashback.service_provider).filter_by(service_provider=payment.service_provider).group_by(Cashback.service_provider).first()
-        c = [cashback for cashback in cashback_check]
-        if payment[0] != c[0]:
-            service_providers.append(payment.service_provider)
-    print(service_providers)
-    '''
+    missing_service = []
     payment = db.session.query(Payment)
+
+    # Finding service provider whose cashback is missing and appending it to the list 
+    payment_service = db.session.query(Payment.service_provider,func.count(Payment.amount)).filter_by(status='COMPLETE').group_by(Payment.service_provider)
+    print(payment_service.first())
+    for payments in payment_service:
+        cashback = db.session.query(func.count(Cashback.amount)).filter_by(service_provider=payments.service_provider).group_by(Cashback.service_provider).first()
+        if cashback == None:
+            missing_service.append(payments.service_provider)
+            print(missing_service)
+            continue
+        elif payments[1] != cashback[0]:
+            missing_service.append(payments.service_provider)
+
     for i in payment:
-        # Check if status is not complete or service provider is NEA
-        if i.status != 'COMPLETE' or i.service_provider == 'NEA':
+        # Check if status is not complete or service provider is not in missing_service
+        if i.status != 'COMPLETE' or i.service_provider =='NEA' or i.service_provider not in missing_service:
             continue
         payment_time = i.time.split(':')
         payment_date = i.date
@@ -266,7 +282,7 @@ def missing_task():
         db.session.add(Missing(q.service_provider, q.service,
                                q.service_name, q.service_type,
                                q.amount, q.status, q.date, q.time))
-
+    return {'Result:','COMPLETED'}
 
 @celery.task()
 def export_job():
